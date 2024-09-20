@@ -69,7 +69,7 @@ services.fastapi-dls = {
   lease.expire = 90;          # LEASE_EXPIRE_DAYS
   lease.renewalPeriod = 0.15; # LEASE_RENEWAL_PERIOD
   # Additional options (for example { INSTANCE_KEY_RSA = "..."; })
-  extraOptions = {}
+  extraOptions = {};
   # Custom timezone in format "America/Montreal", null will default to system timezone
   # See https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List for possible values
   timezone = null;
