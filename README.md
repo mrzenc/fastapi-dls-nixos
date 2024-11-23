@@ -42,8 +42,8 @@ configuration.nix:
     (import (pkgs.fetchFromGithub {
       owner = "mrzenc";
       repo = "fastapi-dls-nixos";
-      rev = "1.3.12";
-      sha256 = ""; # leave empty to error out the correct hash
+      rev = "1.4.1";
+      sha256 = ""; # empty string will cause an error with the expected hash in it
     }) {}) # don't forget about {}
     # ...
   ];
@@ -62,12 +62,13 @@ services.fastapi-dls = {
   # The comments to the right of the options are the environment variable that they set.
   # The values set in this example are the defaults. All possible options are listed here:
   # https://git.collinwebdesigns.de/oscar.krause/fastapi-dls#configuration
-  debug = false;              # DEBUG
-  listen.ip = "localhost";    # DLS_URL
-  listen.port = 443;          # DLS_PORT
-  authTokenExpire = 1;        # TOKEN_EXPIRE_DAYS
-  lease.expire = 90;          # LEASE_EXPIRE_DAYS
-  lease.renewalPeriod = 0.15; # LEASE_RENEWAL_PERIOD
+  debug = false;                # DEBUG
+  listen.ip = "localhost";      # DLS_URL
+  listen.port = 443;            # DLS_PORT
+  authTokenExpire = 1;          # TOKEN_EXPIRE_DAYS
+  lease.expire = 90;            # LEASE_EXPIRE_DAYS
+  lease.renewalPeriod = 0.15;   # LEASE_RENEWAL_PERIOD
+  supportMalformedJSON = false; # SUPPORT_MALFORMED_JSON
   # Additional options (for example { INSTANCE_KEY_RSA = "..."; })
   extraOptions = {};
   # Custom timezone in format "America/Montreal", null will default to system timezone
