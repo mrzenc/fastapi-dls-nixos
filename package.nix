@@ -1,19 +1,19 @@
 { pkgs }:
 let
   pname = "fastapi-dls";
-  version = "1.3.12";
+  version = "1.4.1";
 
-  self = pkgs.python311Packages.buildPythonApplication {
+  self = pkgs.python312Packages.buildPythonApplication {
     inherit pname version;
     src = pkgs.fetchFromGitLab {
       owner = "oscar.krause";
       repo = pname;
-      rev = "6a54c05fbbe430ca6ee4260a1ab61099fab40a92";
-      sha256 = "sha256-dBRdWic01r0w3Zkf6lwmJc+vPz9fwJ79UyCyjZAwnR4=";
+      rev = "699dbf6fac7d058b4c7a3fa25a440971ffc087fd";
+      sha256 = "sha256-H4mtmJ4iQXPZFWQPm12aH/kdg9TAMgHkvkbaHfxfS3I=";
       domain = "git.collinwebdesigns.de";
     };
 
-    propagatedBuildInputs = with pkgs.python311Packages; [
+    propagatedBuildInputs = with pkgs.python312Packages; [
       fastapi
       uvicorn
       python-jose
@@ -29,12 +29,17 @@ let
 
     patches = [
       ./add-algorithms-argument.patch # fixes license activation
-      ./readme-in-same-folder.patch # look for README.md in same folder as all scripts
+      #./readme-in-same-folder.patch # look for README.md in same folder as all scripts
     ];
     postPatch = ''
       mv README.md app/README.md
+      mv examples app/examples
+
       # patch imports
-      sed -i -E "s/^(\s*)(import|from) (util|orm)/\1\2 .\3/" app/main.py
+      sed -i -E "s/^(\s*)(import|from) (util|orm)/\1\2 .\3/" app/*.py
+      # patch paths
+      substituteInPlace app/main.py \
+        --replace '../README.md' './README.md'
 
       mv app fastapi_dls
     '';
@@ -141,7 +146,7 @@ setup(
     name='${pname}',
     version='${version}',
     packages=[("fastapi_dls")],
-    package_data={"fastapi_dls": ["README.md"]},
+    package_data={"fastapi_dls": ["README.md", "examples/*"]},
     include_package_data=True,
     entry_points={
         'console_scripts': [
