@@ -42,7 +42,7 @@ configuration.nix:
     (import (pkgs.fetchFromGithub {
       owner = "mrzenc";
       repo = "fastapi-dls-nixos";
-      rev = "1.4.1";
+      rev = "v1.4.1";
       sha256 = ""; # empty string will cause an error with the expected hash in it
     }) {}) # don't forget about {}
     # ...
