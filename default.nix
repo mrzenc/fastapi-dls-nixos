@@ -16,7 +16,7 @@ let
     DATABASE = "sqlite:////var/lib/fastapi-dls/db.sqlite";
     INSTANCE_KEY_RSA = "/var/lib/fastapi-dls/instance.private.pem";
     INSTANCE_KEY_PUB = "/var/lib/fastapi-dls/instance.public.pem";
-    SUPPORT_MALFORMED_JSON = builtins.toString.supportMalformedJSON;
+    SUPPORT_MALFORMED_JSON = builtins.toString cfg.supportMalformedJSON;
   } // lib.optionalAttrs (cfg.timezone != null) {
     TZ = cfg.timezone;
   } // cfg.extraOptions;
