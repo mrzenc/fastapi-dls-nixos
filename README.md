@@ -39,11 +39,10 @@ configuration.nix:
 ```nix
 {
   imports = [
-    (import (pkgs.fetchFromGithub {
-      owner = "mrzenc";
-      repo = "fastapi-dls-nixos";
-      rev = "v1.4.1";
-      sha256 = ""; # empty string will cause an error with the expected hash in it
+    (import (builtins.fetchGit {
+      url = "https://github.com/mrzenc/fastapi-dls-nixos.git";
+      # Pin to specific version (not required)
+      ref = "refs/tags/v1.4.1";
     }) {}) # don't forget about {}
     # ...
   ];
