@@ -1,5 +1,8 @@
 # NixOS module for [fastapi-dls](https://git.collinwebdesigns.de/oscar.krause/fastapi-dls)
 
+> [!WARNING]
+> There is a [pull request](https://github.com/NixOS/nixpkgs/pull/358647) which adds fastapi-dls into nixpkgs. Once merged, this repository will be archived
+
 ## Installation
 
 ### With Flakes
@@ -8,7 +11,7 @@ flake.nix:
 
 ```nix
 {
-  inputs = {
+#   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/some-channel";
     # add new input
     fastapi-dls-nixos = {
@@ -42,7 +45,7 @@ configuration.nix:
     (import (builtins.fetchGit {
       url = "https://github.com/mrzenc/fastapi-dls-nixos.git";
       # Pin to specific version (not required)
-      ref = "refs/tags/v1.4.1";
+      ref = "refs/tags/v1.5.1";
     }) {}) # don't forget about {}
     # ...
   ];
@@ -67,7 +70,6 @@ services.fastapi-dls = {
   authTokenExpire = 1;          # TOKEN_EXPIRE_DAYS
   lease.expire = 90;            # LEASE_EXPIRE_DAYS
   lease.renewalPeriod = 0.15;   # LEASE_RENEWAL_PERIOD
-  supportMalformedJSON = false; # SUPPORT_MALFORMED_JSON
   # Additional options (for example { INSTANCE_KEY_RSA = "..."; })
   extraOptions = {};
   # Custom timezone in format "America/Montreal", null will default to system timezone
