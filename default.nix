@@ -16,7 +16,6 @@ let
     DATABASE = "sqlite:////var/lib/fastapi-dls/db.sqlite";
     INSTANCE_KEY_RSA = "/var/lib/fastapi-dls/instance.private.pem";
     INSTANCE_KEY_PUB = "/var/lib/fastapi-dls/instance.public.pem";
-    SUPPORT_MALFORMED_JSON = builtins.toString cfg.supportMalformedJSON;
   } // lib.optionalAttrs (cfg.timezone != null) {
     TZ = cfg.timezone;
   } // cfg.extraOptions;
@@ -24,6 +23,10 @@ let
     else self.outputs.packages.${pkgs.stdenv.targetPlatform.system}.default;
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "fastapi-dls" "supportMalformedJSON" ]
+      "Option services.fastapi-dls.supportMalformedJSON is not supported as the functionality has been removed since 1.5.0")
+  ];
   options = {
     services.fastapi-dls = {
       enable = lib.mkEnableOption "minimal Delegated License Service (DLS)";
@@ -69,11 +72,6 @@ in
           detected during license renewal and the client has 19.2 hours in which to re-establish
           connectivity before its license expires.
         '';
-      };
-      supportMalformedJSON = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Support parsing for mal formatted \"mac_address_list\"";
       };
       extraOptions = lib.mkOption {
         type = lib.types.attrsOf lib.types.str;

@@ -1,15 +1,15 @@
 { pkgs }:
 let
   pname = "fastapi-dls";
-  version = "1.4.1";
+  version = "1.5.1";
 
   self = pkgs.python312Packages.buildPythonApplication {
     inherit pname version;
     src = pkgs.fetchFromGitLab {
       owner = "oscar.krause";
       repo = pname;
-      rev = "699dbf6fac7d058b4c7a3fa25a440971ffc087fd";
-      sha256 = "sha256-H4mtmJ4iQXPZFWQPm12aH/kdg9TAMgHkvkbaHfxfS3I=";
+      rev = "aec6535391f1ef19538e072dfbc4c3dc1c145fec";
+      sha256 = "sha256-u7aRotIe3ai6OAYP/DxHGXqUTB7GpzvJVp9A7MJIxb0=";
       domain = "git.collinwebdesigns.de";
     };
 
@@ -27,10 +27,6 @@ let
 
     doCheck = false;
 
-    patches = [
-      ./add-algorithms-argument.patch # fixes license activation
-      #./readme-in-same-folder.patch # look for README.md in same folder as all scripts
-    ];
     postPatch = ''
       mv README.md app/README.md
       mv examples app/examples
