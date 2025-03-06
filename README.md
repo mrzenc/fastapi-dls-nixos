@@ -11,7 +11,7 @@ flake.nix:
 
 ```nix
 {
-#   inputs = {
+  inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/some-channel";
     # add new input
     fastapi-dls-nixos = {
