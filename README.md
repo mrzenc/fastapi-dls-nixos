@@ -3,6 +3,9 @@
 > [!WARNING]
 > There is a [pull request](https://github.com/NixOS/nixpkgs/pull/358647) which adds fastapi-dls into nixpkgs. Once merged, this repository will be archived
 
+> [!NOTE]
+> FastAPI-DLS v2.0 is available in `v2.0` branch
+
 ## Installation
 
 ### With Flakes
@@ -15,6 +18,8 @@ flake.nix:
     nixpkgs.url = "github:NixOS/nixpkgs/some-channel";
     # add new input
     fastapi-dls-nixos = {
+      # v2.0 branch
+      # url = "github:mrzenc/fastapi-dls-nixos/v2.0";
       url = "github:mrzenc/fastapi-dls-nixos";
       # use nixpkgs provided by system to save some space
       # do not use this in case of problems
@@ -46,6 +51,8 @@ configuration.nix:
       url = "https://github.com/mrzenc/fastapi-dls-nixos.git";
       # Pin to specific version (not required)
       ref = "refs/tags/v1.5.1";
+      # v2.0 branch
+      # ref = "v2.0";
     }) {}) # don't forget about {}
     # ...
   ];
