@@ -1,15 +1,15 @@
 { pkgs }:
 let
   pname = "fastapi-dls";
-  version = "1.5.1";
+  version = "2.0";
 
   self = pkgs.python312Packages.buildPythonApplication {
     inherit pname version;
     src = pkgs.fetchFromGitLab {
       owner = "oscar.krause";
       repo = pname;
-      rev = "aec6535391f1ef19538e072dfbc4c3dc1c145fec";
-      sha256 = "sha256-u7aRotIe3ai6OAYP/DxHGXqUTB7GpzvJVp9A7MJIxb0=";
+      rev = "f38378bbc811eab22368f526c726f9482f365d9d";
+      sha256 = "sha256-HuUrewcA47D+C3btOSAqhq3+2kvWJ8NXUtsNmOhJexE=";
       domain = "git.collinwebdesigns.de";
     };
 
@@ -17,12 +17,11 @@ let
       fastapi
       uvicorn
       python-jose
-      pycryptodome
+      cryptography
       python-dateutil
       sqlalchemy
       markdown
       python-dotenv
-      cryptography
     ] ++ uvicorn.optional-dependencies.standard;
 
     doCheck = false;
@@ -35,7 +34,10 @@ let
       sed -i -E "s/^(\s*)(import|from) (util|orm)/\1\2 .\3/" app/*.py
       # patch paths
       substituteInPlace app/main.py \
-        --replace '../README.md' './README.md'
+        --replace '../README.md' './README.md' \
+        --replace "join(dirname(__file__), 'cert" "join('/var/lib/fastapi-dls', 'cert"
+      substituteInPlace app/util.py \
+        --replace "join(dirname(__file__), 'cert" "join('/var/lib/fastapi-dls', 'cert"
 
       mv app fastapi_dls
     '';
@@ -53,27 +55,6 @@ from datetime import datetime, timezone, timedelta
 
 import uvicorn
 import os
-
-
-def create_jwt_rsa_keys():
-    key = rsa.generate_private_key(
-        public_exponent=65537,
-        key_size=2048,
-        backend=default_backend(),
-    )
-
-    public_pem = key.public_key().public_bytes(
-        encoding=serialization.Encoding.PEM,
-        format=serialization.PublicFormat.SubjectPublicKeyInfo
-    )
-    private_pem = key.private_bytes(
-        encoding=serialization.Encoding.PEM,
-        format=serialization.PrivateFormat.PKCS8,
-        encryption_algorithm=serialization.NoEncryption(),
-    )
-
-    open("/var/lib/fastapi-dls/instance.public.pem", "wb").write(public_pem)
-    open("/var/lib/fastapi-dls/instance.private.pem", "wb").write(private_pem)
 
 
 def create_ssl_certs():
@@ -114,13 +95,11 @@ def create_ssl_certs():
 
 def main():
     # Check if certificates are present
-    for i in ("instance.private.pem", "instance.public.pem",
-              "webserver.key", "webserver.crt"):
+    for i in ("webserver.key", "webserver.crt"):
         if os.path.isfile("/var/lib/fastapi-dls/" + i):
           continue
 
         # Create certificates
-        create_jwt_rsa_keys()
         create_ssl_certs()
         break
 
@@ -142,7 +121,7 @@ setup(
     name='${pname}',
     version='${version}',
     packages=[("fastapi_dls")],
-    package_data={"fastapi_dls": ["README.md", "examples/*"]},
+    package_data={"fastapi_dls": ["README.md", "static/*"]},
     include_package_data=True,
     entry_points={
         'console_scripts': [

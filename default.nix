@@ -14,8 +14,6 @@ let
     LEASE_EXPIRE_DAYS = builtins.toString cfg.lease.expire;
     LEASE_RENEWAL_PERIOD = builtins.toString cfg.lease.renewalPeriod;
     DATABASE = "sqlite:////var/lib/fastapi-dls/db.sqlite";
-    INSTANCE_KEY_RSA = "/var/lib/fastapi-dls/instance.private.pem";
-    INSTANCE_KEY_PUB = "/var/lib/fastapi-dls/instance.public.pem";
   } // lib.optionalAttrs (cfg.timezone != null) {
     TZ = cfg.timezone;
   } // cfg.extraOptions;
@@ -77,8 +75,7 @@ in
         type = lib.types.attrsOf lib.types.str;
         default = {};
         example = {
-          INSTANCE_KEY_RSA = "/home/user/fastapi-dls/instance.private.pem";
-          INSTANCE_KEY_PUB = "/home/user/fastapi-dls/instance.public.pem";
+          CORS_ORIGINS = "https://localhost,https://127.0.0.1,https://10.2.3.40";
         };
         description = "Extra environment variables to pass to fastapi-dls.";
       };
@@ -97,6 +94,7 @@ in
         StateDirectory = "fastapi-dls";
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         WorkingDirectory = "/var/lib/fastapi-dls";
+        ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/lib/fastapi-dls/cert";
         ExecStart = "${lib.getBin package}/bin/fastapi-dls";
         Restart = "always";
         KillSignal = "SIGQUIT";
