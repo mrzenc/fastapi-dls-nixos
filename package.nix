@@ -1,15 +1,15 @@
 { pkgs }:
 let
   pname = "fastapi-dls";
-  version = "2.0";
+  version = "2.0.2";
 
   self = pkgs.python312Packages.buildPythonApplication {
     inherit pname version;
     src = pkgs.fetchFromGitLab {
       owner = "oscar.krause";
       repo = pname;
-      rev = "f38378bbc811eab22368f526c726f9482f365d9d";
-      sha256 = "sha256-HuUrewcA47D+C3btOSAqhq3+2kvWJ8NXUtsNmOhJexE=";
+      rev = "3ebf87f01aacc4c0b62e3bfbf53e65682b20ab1b";
+      sha256 = "sha256-VF0010fibfTw9BKX+htNumn7IIRpYNdfOXMTAO9qhTE=";
       domain = "git.collinwebdesigns.de";
     };
 
