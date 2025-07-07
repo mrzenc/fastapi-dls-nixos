@@ -4,6 +4,12 @@ let
   version = "2.0.2";
 
   self = pkgs.python312Packages.buildPythonApplication {
+    pyproject = true;
+
+    build-system = [
+      pkgs.python312Packages.setuptools
+    ];
+
     inherit pname version;
     src = pkgs.fetchFromGitLab {
       owner = "oscar.krause";
